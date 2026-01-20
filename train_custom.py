@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 An implementation of the training pipeline of AlphaZero for Gomoku
+Modified to support custom board sizes including 12x12 with 5 in a row
 
 @author: Junxiao Song
 """
@@ -46,6 +47,8 @@ class TrainPipeline():
         # num of simulations used for the pure mcts, which is used as
         # the opponent to evaluate the trained policy
         self.pure_mcts_playout_num = 1000
+        
+        # Initialize the policy-value net with GPU option
         if init_model:
             # start training from an initial policy-value net
             self.policy_value_net = PolicyValueNet(self.board_width,
@@ -193,5 +196,21 @@ class TrainPipeline():
 
 
 if __name__ == '__main__':
-    training_pipeline = TrainPipeline()
+    # Allow customization of board dimensions
+    import argparse
+    parser = argparse.ArgumentParser(description='Train AlphaZero for Gomoku')
+    parser.add_argument('--width', type=int, default=6, help='Board width (default: 6)')
+    parser.add_argument('--height', type=int, default=6, help='Board height (default: 6)')
+    parser.add_argument('--n_in_row', type=int, default=4, help='Number in a row to win (default: 4)')
+    parser.add_argument('--use_gpu', action='store_true', help='Use GPU for training')
+    
+    args = parser.parse_args()
+    
+    print(f"Training on {args.width}x{args.height} board with {args.n_in_row} in a row to win")
+    print(f"Using GPU: {args.use_gpu}")
+    
+    training_pipeline = TrainPipeline(board_width=args.width, 
+                                      board_height=args.height, 
+                                      n_in_row=args.n_in_row,
+                                      use_gpu=args.use_gpu)
     training_pipeline.run()
