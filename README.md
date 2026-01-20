@@ -78,7 +78,11 @@ from policy_value_net_pytorch import PolicyValueNet  # Pytorch (default)
 # from policy_value_net_tensorflow import PolicyValueNet # Tensorflow
 ```
 
-The models (best_policy.model and current_policy.model) will be saved every a few updates (default 50).
+The models will be saved in an organized output directory structure:
+- `output/<width>x<height>_<n>_in_a_row/current_policy.model` - latest model
+- `output/<width>x<height>_<n>_in_a_row/best_policy.model` - best performing model
+
+Models are saved every 50 updates by default.
 
 **Note:** the 4 provided models were trained using Theano/Lasagne, to use them with PyTorch, please refer to [issue 5](https://github.com/junxiaosong/AlphaZero_Gomoku/issues/5).
 
